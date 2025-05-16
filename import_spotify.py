@@ -1,3 +1,4 @@
+import os
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import csv
@@ -28,14 +29,35 @@ auth_response_code = input("Enter the authorization code from the URL: ")
 token_info = auth_manager.get_access_token(auth_response_code)
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
-# Step 1: Create a new playlist
+# Step 1: Check if playlist exists or create new one
 user_id = sp.current_user()['id']
-playlist_name = "Enchanted Garden Party"
-playlist = sp.user_playlist_create(user=user_id, name=playlist_name, public=True)
-playlist_id = playlist['id']
+playlist_name = "Brigitte 65 birthday"
+
+# Search for existing playlists
+playlists = sp.current_user_playlists()
+existing_playlist = None
+while playlists:
+    for playlist in playlists['items']:
+        if playlist['name'] == playlist_name:
+            existing_playlist = playlist
+            break
+    if existing_playlist or not playlists['next']:
+        break
+    playlists = sp.next(playlists)
+
+if existing_playlist:
+    print(f"Found existing playlist: {playlist_name}")
+    playlist_id = existing_playlist['id']
+    # Clear existing tracks
+    sp.playlist_replace_items(playlist_id, [])
+    print("Cleared existing tracks from playlist")
+else:
+    print(f"Creating new playlist: {playlist_name}")
+    playlist = sp.user_playlist_create(user=user_id, name=playlist_name, public=True)
+    playlist_id = playlist['id']
 
 # Step 2: Read songs from the CSV file
-csv_file = 'enchanted_garden_party_simplified_playlist.csv'  # Your CSV file path
+csv_file = 'mothers_birthday_10hr_playlist.csv'  # Your CSV file path
 
 def get_song_uri(artist, track):
     query = f"artist:{artist} track:{track}"
@@ -59,10 +81,17 @@ def add_songs_to_playlist(csv_file, playlist_id):
             else:
                 print(f"Track not found: {artist} - {track}")
         
-        # Step 4: Add tracks to the playlist
+        # Add tracks to the playlist in batches of 100
         if track_uris:
-            sp.playlist_add_items(playlist_id, track_uris)
-            print("Tracks successfully added to the playlist!")
+            batch_size = 100
+            for i in range(0, len(track_uris), batch_size):
+                batch = track_uris[i:i + batch_size]
+                try:
+                    sp.playlist_add_items(playlist_id, batch)
+                    print(f"Added batch of {len(batch)} tracks to the playlist!")
+                except Exception as e:
+                    print(f"Error adding batch {i//batch_size + 1}: {str(e)}")
+            print("Finished adding tracks to the playlist!")
 
 # Run the script
 add_songs_to_playlist(csv_file, playlist_id)
