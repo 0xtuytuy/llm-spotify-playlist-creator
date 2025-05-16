@@ -47,18 +47,17 @@ export SPOTIPY_CLIENT_SECRET='your_client_secret_here'
    - `Artist`: The name of the artist
    - `Track`: The name of the track
 
-2. Update the script with your playlist name and CSV file path:
-   ```python
-   playlist_name = "Your Playlist Name"
-   csv_file = 'your_playlist.csv'
-   ```
-
-3. Run the script:
+2. Run the script with the required arguments:
 ```bash
-python import_spotify.py
+python import_spotify.py --playlist "Your Playlist Name" --csv "your_playlist.csv"
 ```
 
-4. Follow the authentication process:
+Or using the short form:
+```bash
+python import_spotify.py -p "Your Playlist Name" -c "your_playlist.csv"
+```
+
+3. Follow the authentication process:
    - Visit the provided URL
    - Log in to Spotify
    - Authorize the application
