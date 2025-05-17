@@ -20,8 +20,8 @@ A Python script that allows you to import songs from a CSV file into a Spotify p
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/spotify-csv-importer.git
-cd spotify-csv-importer
+git clone https://github.com/yourusername/llm-spotify-playlist-creator.git
+cd llm-spotify-playlist-creator
 ```
 
 2. Create a virtual environment and activate it:
