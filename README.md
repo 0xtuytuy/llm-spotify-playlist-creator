@@ -93,3 +93,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) 
 ## Contributing
 
 Feel free to submit issues and enhancement requests!
+
+## Running Tests
+
+Install the development requirements and run `pytest`:
+```bash
+pip install -r requirements.txt
+pytest
+```
