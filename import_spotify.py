@@ -129,8 +129,4 @@ def main():
     add_songs_to_playlist(csv_file, playlist_id)
 
 if __name__ == '__main__':
-    # Check if --help or -h is in the arguments
-    if len(sys.argv) > 1 and sys.argv[1] in ['--help', '-h']:
-        parse_arguments()  # This will show help and exit
-    else:
-        main()
+    main()
