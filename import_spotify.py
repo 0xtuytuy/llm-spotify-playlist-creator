@@ -40,6 +40,12 @@ def main():
     SPOTIPY_CLIENT_SECRET = os.getenv('SPOTIPY_CLIENT_SECRET')
     SPOTIPY_REDIRECT_URI = 'http://localhost:8888/callback/'
 
+    if not SPOTIPY_CLIENT_ID or not SPOTIPY_CLIENT_SECRET:
+        print(
+            'Error: SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET environment variables must be set.'
+        )
+        sys.exit(1)
+
     # Define the scope for the playlist modification
     scope = 'playlist-modify-public'
 
